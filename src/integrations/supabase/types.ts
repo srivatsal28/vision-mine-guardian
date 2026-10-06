@@ -14,16 +14,198 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      camera_access: {
+        Row: {
+          camera_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          camera_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          camera_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "camera_access_camera_id_fkey"
+            columns: ["camera_id"]
+            isOneToOne: false
+            referencedRelation: "cameras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cameras: {
+        Row: {
+          access_code: string
+          created_at: string
+          id: string
+          location: string
+          name: string
+          status: string
+          stream_url: string
+        }
+        Insert: {
+          access_code: string
+          created_at?: string
+          id?: string
+          location?: string
+          name: string
+          status?: string
+          stream_url?: string
+        }
+        Update: {
+          access_code?: string
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          status?: string
+          stream_url?: string
+        }
+        Relationships: []
+      }
+      complaints: {
+        Row: {
+          analysis: Json | null
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          location: string
+          severity: string | null
+          status: string
+          title: string
+        }
+        Insert: {
+          analysis?: Json | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          id?: string
+          location?: string
+          severity?: string | null
+          status?: string
+          title: string
+        }
+        Update: {
+          analysis?: Json | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          location?: string
+          severity?: string | null
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          designation: string
+          full_name: string
+          id: string
+          site_scope: string
+          username: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          designation?: string
+          full_name?: string
+          id: string
+          site_scope?: string
+          username: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          designation?: string
+          full_name?: string
+          id?: string
+          site_scope?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      sensors: {
+        Row: {
+          id: string
+          kind: string
+          location: string
+          name: string
+          safe_limit: number
+          unit: string
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          id?: string
+          kind: string
+          location: string
+          name: string
+          safe_limit: number
+          unit: string
+          updated_at?: string
+          value: number
+        }
+        Update: {
+          id?: string
+          kind?: string
+          location?: string
+          name?: string
+          safe_limit?: number
+          unit?: string
+          updated_at?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      redeem_camera_code: { Args: { _code: string }; Returns: string }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "officer" | "inspector" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +332,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "officer", "inspector", "viewer"],
+    },
   },
 } as const
