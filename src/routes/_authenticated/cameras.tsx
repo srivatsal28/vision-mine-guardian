@@ -41,7 +41,7 @@ function Cameras() {
     setBusy(true);
     const { error } = await supabase.rpc("redeem_camera_code", { _code: code });
     setBusy(false);
-    if (error) return toast.error(error.message.includes("not valid") ? "This access code is not valid." : error.message);
+    if (error) { toast.error(error.message.includes("not valid") ? "This access code is not valid." : error.message); return; }
     toast.success("Camera connected.");
     setCode("");
     qc.invalidateQueries();
@@ -50,7 +50,7 @@ function Cameras() {
   async function addCamera(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("cameras").insert(f);
-    if (error) return toast.error(error.message.includes("duplicate") ? "That code is already used." : error.message);
+    if (error) { toast.error(error.message.includes("duplicate") ? "That code is already used." : error.message); return; }
     toast.success(`Camera added. Share code ${f.access_code} with people who need it.`);
     setF({ name: "", location: "", stream_url: "", access_code: makeCode() });
     qc.invalidateQueries();

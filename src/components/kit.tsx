@@ -26,7 +26,7 @@ const SEV: Record<string, string> = {
 };
 export function SeverityBadge({ s }: { s?: string | null }) {
   if (!s) return <span className="rounded-full px-2.5 py-0.5 text-xs text-muted-foreground ring-1 ring-border">Not analysed</span>;
-  return <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ring-1 ${SEV[s] ?? SEV.medium}`}>{s}</span>;
+  return <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ring-1 ${SEV[s] ?? SEV['medium']}`}>{s}</span>;
 }
 
 /** Plays a camera stream: HLS/MP4 video, YouTube/embed page, MJPEG/snapshot image, or the demo feed when no URL is set. */

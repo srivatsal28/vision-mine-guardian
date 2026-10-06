@@ -43,7 +43,7 @@ export function searchRules(query: string, k = 10) {
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s)
     .slice(0, k)
-    .map((x) => ({ source: DOCS[x.i].s, text: DOCS[x.i].t, score: Math.round(x.s * 10) / 10 }));
+    .map((x) => ({ source: DOCS[x.i]!.s, text: DOCS[x.i]!.t, score: Math.round(x.s * 10) / 10 }));
 }
 
 const analysisSchema = z.object({
@@ -60,7 +60,7 @@ const analysisSchema = z.object({
 export type Analysis = z.infer<typeof analysisSchema>;
 
 function provider() {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env['LOVABLE_API_KEY'];
   if (!apiKey) throw new Error("AI is not configured yet.");
   return createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",
