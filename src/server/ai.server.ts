@@ -7,7 +7,7 @@ type Chunk = { s: string; t: string };
 const DOCS = chunks as Chunk[];
 
 const STOP = new Set(
-  "the of and to in a is for be or by on with as any shall that this at an are from such which it may not all其 have has was were under said other than".split(" "),
+  "the of and to in a is for be or by on with as any shall that this at an are from such which it may not all have has was were under said other than".split(" "),
 );
 function tokens(text: string) {
   return text.toLowerCase().match(/[a-z0-9]{3,}/g)?.filter((w) => !STOP.has(w)) ?? [];
