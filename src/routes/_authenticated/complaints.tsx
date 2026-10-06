@@ -65,8 +65,8 @@ function Complaints() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const { data, error } = await supabase.from("complaints").insert({ ...f, created_by: me?.id }).select("id").single();
-    if (error) return toast.error(error.message);
+    const { data, error } = await supabase.from("complaints").insert({ ...f, created_by: me?.id ?? null }).select("id").single();
+    if (error) { toast.error(error.message); return; }
     setF({ title: "", description: "", location: "" });
     qc.invalidateQueries();
     run(data.id);
