@@ -8,6 +8,13 @@
       "when": 1791290949012,
       "tag": "0000_coalguard_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791453077176,
+      "tag": "0001_tighten_read_policies",
+      "breakpoints": true
     }
   ]
 }
