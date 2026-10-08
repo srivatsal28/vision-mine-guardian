@@ -126,7 +126,7 @@
   backdrop-filter: blur(12px);
 }
 @utility glass-tile {
-  background: oklch(1 0 0 / 4%);
+  background: oklch(0.97 0.006 250);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
 }
@@ -141,8 +141,8 @@
 }
 @utility grid-lines {
   background-image:
-    linear-gradient(oklch(1 0 0 / 4%) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(1 0 0 / 4%) 1px, transparent 1px);
+    linear-gradient(oklch(0.22 0.03 265 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.22 0.03 265 / 4%) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 /* Coal strata: faint diagonal seams */
@@ -150,9 +150,9 @@
   background-image: repeating-linear-gradient(
     165deg,
     transparent 0 38px,
-    oklch(1 0 0 / 3%) 38px 39px,
+    oklch(0.22 0.03 265 / 3%) 38px 39px,
     transparent 39px 90px,
-    oklch(0.88 0.11 85 / 5%) 90px 91px
+    oklch(0.75 0.13 80 / 6%) 90px 91px
   );
 }
 
