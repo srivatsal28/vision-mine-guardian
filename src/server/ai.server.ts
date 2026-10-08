@@ -139,3 +139,59 @@ export async function askRulesAI(question: string) {
     friendly(err);
   }
 }
+
+const hazardSchema = z.object({
+  summary: z.string(),
+  overall_risk: z.enum(["low", "medium", "high", "critical"]),
+  hazards: z.array(
+    z.object({
+      hazard: z.string(),
+      where_in_image: z.string(),
+      severity: z.enum(["low", "medium", "high", "critical"]),
+      rule: z.string(),
+      source: z.string(),
+      corrective_action: z.string(),
+    }),
+  ),
+  immediate_actions: z.array(z.string()),
+});
+export type HazardReport = z.infer<typeof hazardSchema>;
+
+export async function analyzeSnapshotAI(input: { image: string; notes: string; location: string }) {
+  const rules = context(
+    `${input.notes} helmet ppe roof support ventilation dust fire electrical machinery haul road explosives fencing lighting`,
+  );
+  try {
+    const result = streamText({
+      model: provider().responses("openai/gpt-6-astra"),
+      system:
+        "You are a mine safety inspector in India reviewing a CCTV snapshot. List only hazards you can actually see. " +
+        "Match each hazard to the regulation excerpts given and cite the section/rule exactly; if none fits, write 'No matching excerpt'. " +
+        "If the image shows no hazards, return an empty hazards list. Use short, plain English.",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `Location: ${input.location || "Not given"}\nSupervisor notes: ${input.notes || "None"}\n\nREGULATION EXCERPTS\n${rules}`,
+            },
+            { type: "image", image: new URL(input.image) },
+          ],
+        },
+      ],
+      output: Output.object({ schema: hazardSchema }),
+      providerOptions: OPTS,
+    });
+    return (await result.output) as HazardReport;
+  } catch (err) {
+    if (NoObjectGeneratedError.isInstance(err) && err.text) {
+      try {
+        return JSON.parse(err.text) as HazardReport;
+      } catch {
+        /* fall through */
+      }
+    }
+    friendly(err);
+  }
+}

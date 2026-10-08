@@ -32,3 +32,16 @@ export const askRules = createServerFn({ method: "POST" })
     const { askRulesAI } = await import("@/server/ai.server");
     return askRulesAI(data.question);
   });
+
+export const analyzeSnapshot = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { image: string; notes?: string; location?: string }) => {
+    const image = String(d.image ?? "");
+    if (!/^data:image\/(png|jpe?g|webp|gif);base64,/.test(image)) throw new Error("Please upload a PNG, JPG or WEBP image.");
+    if (image.length > 8_000_000) throw new Error("Image is too large (max about 5 MB).");
+    return { image, notes: String(d.notes ?? "").slice(0, 1000), location: String(d.location ?? "").slice(0, 200) };
+  })
+  .handler(async ({ data }) => {
+    const { analyzeSnapshotAI } = await import("@/server/ai.server");
+    return analyzeSnapshotAI(data);
+  });
